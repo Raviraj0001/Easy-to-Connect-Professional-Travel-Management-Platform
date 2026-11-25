@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Easy to Connect | Personal Travel Workspace
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+  <link href="/static/styles.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="auth-screen" id="auth-screen">
+   <div class="auth-card">
+    <div class="brand-icon large">
+     E
+    </div>
+    <p class="eyebrow">
+     YOUR PERSONAL TRAVEL WORKSPACE
+    </p>
+    <h1>
+     Every journey starts with a plan.
+    </h1>
+    <p class="muted">
+     Plan smarter, travel within budget, and be there when it matters.
+    </p>
+    <div class="auth-tabs">
+     <button class="auth-tab active" id="login-tab">
+      Log in
+     </button>
+     <button class="auth-tab" id="register-tab">
+      Create account
+     </button>
+    </div>
+    <form id="auth-form">
+     <label>
+      Email address
+      <input autocomplete="email" id="auth-email" placeholder="you@gmail.com" required="" type="email"/>
+     </label>
+     <label>
+      Password
+      <input autocomplete="current-password" id="auth-password" minlength="8" placeholder="At least 8 characters" required="" type="password"/>
+     </label>
+     <button class="primary-btn full" id="auth-submit" type="submit">
+      Log in to workspace &rarr;
+     </button>
+    </form>
+    <div class="auth-divider">
+     <span>
+      OR
+     </span>
+    </div>
+    <div class="google-signin-button" id="google-signin-button">
+    </div>
+    <p class="fineprint" id="google-signin-help">
+     Google sign-in uses a verified Gmail account. The project owner must configure a Google OAuth Client ID first.
+    </p>
+    <p aria-live="polite" class="form-message" id="auth-message">
+    </p>
+    <p class="fineprint">
+     Your saved journeys and expenses are private to your account. Use a unique password if you choose email/password login.
+    </p>
+   </div>
+  </div>
+  <div class="hidden" id="app-shell">
+   <aside class="sidebar">
+    <a class="brand" href="#">
+     <span class="brand-icon">
+      E
+     </span>
+     <span>
+      <b>
+       Easy to Connect
+      </b>
+      <small>
+       Travel, with a plan.
+      </small>
+     </span>
+    </a>
+    <div class="workspace-label">
+     WORKSPACE
+    </div>
+    <button class="side-link active" data-view="dashboard">
+     <span>
+      ◫
+     </span>
+     Overview
+    </button>
+    <button class="side-link" data-view="planner">
+     <span>
+      ⌁
+     </span>
+     Journey planner
+    </button>
+    <button class="side-link" data-view="emergency">
+     <span>
+      ✳
+     </span>
+     Emergency assistant
+    </button>
+    <button class="side-link" data-view="budget">
+     <span>
+      ₹
+     </span>
+     Budget manager
+    </button>
+    <button class="side-link" data-view="nearby">
+     <span>
+      &target;
+     </span>
+     Nearby &amp; map
+    </button>
+    <button class="side-link" data-view="predictor">
+     <span>
+      ⌘
+     </span>
+     ML predictor
+    </button>
+    <button class="side-link" data-view="trips">
+     <span>
+      ▤
+     </span>
+     Saved journeys
+    </button>
+    <div class="sidebar-bottom">
+     <div class="clock-card">
+      <span>
+       INDIA STANDARD TIME
+      </span>
+      <strong id="digital-clock">
+       --:--:--
+      </strong>
+      <small id="clock-date">
+       Loading date&hellip;
+      </small>
+     </div>
+     <div class="user-chip">
+      <span class="avatar">
+       U
+      </span>
+      <span class="user-meta">
+       <b id="user-email">
+        Signed in
+       </b>
+       <small>
+        Personal workspace
+       </small>
+      </span>
+     </div>
+     <button class="logout-btn" id="logout-btn">
+      &rarrhk; Log out
+     </button>
+    </div>
+   </aside>
+   <main class="main">
+    <header class="topbar">
+     <div>
+      <span class="eyebrow">
+       YOUR TRAVEL CONTROL CENTER
+      </span>
+      <h1 id="page-title">
+       Good day. Let's make a plan.
+      </h1>
+     </div>
+     <div class="topbar-right">
+      <span class="secure-pill">
+       ● Session active
+      </span>
+      <span class="date-pill" id="top-date">
+      </span>
+     </div>
+    </header>
+    <div class="data-notice">
+     <strong>
+      Transparent estimates:
+     </strong>
+     map search and nearby places use OpenStreetMap when available. Journey times and fares are estimates&mdash;not live schedules, ticket prices, availability or tracking. Verify transport details with official operators.
+    </div>
+    <section class="view active" id="view-dashboard">
+     <div class="welcome-banner">
+      <div>
+       <span class="eyebrow light">
+        A LITTLE MORE CERTAINTY
+       </span>
+       <h2>
+        When someone needs you,
+        <br/>
+        find your next best step.
+       </h2>
+       <p>
+        Compare options, set a budget and keep your plan in one place.
+       </p>
+       <button class="light-btn" data-go="planner">
+        Plan a journey
+        <span>
+         &rarr;
+        </span>
+       </button>
+      </div>
+      <div class="banner-art">
+       <div class="banner-circle">
+       </div>
+       <div class="banner-route">
+        ● &boxh; &boxh; &boxh; ✦
+       </div>
+       <div class="mini-ticket">
+        <small>
+         YOUR NEXT STEP
+        </small>
+        <b>
+         Compare. Choose. Go.
+        </b>
+        <span>
+         One clear plan forward.
+        </span>
+       </div>
+      </div>
+     </div>
+     <div class="stat-grid">
+      <article class="stat-card">
+       <span class="stat-icon teal">
+        ⌁
+       </span>
+       <span class="stat-label">
+        SAVED JOURNEYS
+       </span>
+       <strong id="stat-trips">
+        0
+       </strong>
+       <small>
+        Your travel decisions
+       </small>
+      </article>
+      <article class="stat-card">
+       <span class="stat-icon gold">
+        ₹
+       </span>
+       <span class="stat-label">
+        TRACKED EXPENSES
+       </span>
+       <strong id="stat-spend">
+        ₹0
+       </strong>
+       <small>
+        Total logged expenses
+       </small>
+      </article>
+      <article class="stat-card">
+       <span class="stat-icon blue">
+        &target;
+       </span>
+       <span class="stat-label">
+        TRAVEL MODES
+       </span>
+       <strong>
+        3
+       </strong>
+       <small>
+        Bus &middot; Train &middot; Flight
+       </small>
+      </article>
+      <article class="stat-card">
+       <span class="stat-icon purple">
+        ✳
+       </span>
+       <span class="stat-label">
+        SMART ASSISTANCE
+       </span>
+       <strong>
+        6 modules
+       </strong>
+       <small>
+        One connected workspace
+       </small>
+      </article>
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        GET STARTED
+       </span>
+       <h2>
+        Your travel toolkit
+       </h2>
+      </div>
+     </div>
+     <div class="tool-grid">
+      <button class="tool-card" data-go="planner">
+       <span class="tool-icon">
+        ⌁
+       </span>
+       <b>
+        Compare journeys
+       </b>
+       <small>
+        Find an option by time and cost.
+       </small>
+       <span class="tool-arrow">
+        &nearrow;
+       </span>
+      </button>
+      <button class="tool-card" data-go="emergency">
+       <span class="tool-icon coral">
+        ✳
+       </span>
+       <b>
+        Urgent travel
+       </b>
+       <small>
+        Prioritize getting there sooner.
+       </small>
+       <span class="tool-arrow">
+        &nearrow;
+       </span>
+      </button>
+      <button class="tool-card" data-go="budget">
+       <span class="tool-icon gold">
+        ₹
+       </span>
+       <b>
+        Track expenses
+       </b>
+       <small>
+        Know what your trip may cost.
+       </small>
+       <span class="tool-arrow">
+        &nearrow;
+       </span>
+      </button>
+      <button class="tool-card" data-go="nearby">
+       <span class="tool-icon blue">
+        &target;
+       </span>
+       <b>
+        Find nearby places
+       </b>
+       <small>
+        Explore transport hubs and services.
+       </small>
+       <span class="tool-arrow">
+        &nearrow;
+       </span>
+      </button>
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        OFFICIAL BOOKING DESTINATIONS
+       </span>
+       <h2>
+        Ready to book?
+       </h2>
+      </div>
+      <span class="muted">
+       Opens the provider in a new tab
+      </span>
+     </div>
+     <div class="booking-grid">
+      <a class="booking-card booking-bus" href="https://www.redbus.in/" rel="noopener noreferrer" target="_blank">
+       <span aria-hidden="true" class="booking-icon">
+        🚌
+       </span>
+       <span class="booking-copy">
+        <b>
+         Book bus tickets
+        </b>
+        <small>
+         redBus &middot; Bus search and booking
+        </small>
+       </span>
+       <span aria-hidden="true" class="booking-arrow">
+        &nearrow;
+       </span>
+      </a>
+      <a class="booking-card booking-train" href="https://www.irctc.co.in/nget/train-search" rel="noopener noreferrer" target="_blank">
+       <span aria-hidden="true" class="booking-icon">
+        🚆
+       </span>
+       <span class="booking-copy">
+        <b>
+         Book train tickets
+        </b>
+        <small>
+         IRCTC &middot; Indian Railways booking
+        </small>
+       </span>
+       <span aria-hidden="true" class="booking-arrow">
+        &nearrow;
+       </span>
+      </a>
+      <a class="booking-card booking-flight" href="https://www.google.com/travel/flights" rel="noopener noreferrer" target="_blank">
+       <span aria-hidden="true" class="booking-icon">
+        ✈️
+       </span>
+       <span class="booking-copy">
+        <b>
+         Search flights
+        </b>
+        <small>
+         Google Flights &middot; Flight comparison
+        </small>
+       </span>
+       <span aria-hidden="true" class="booking-arrow">
+        &nearrow;
+       </span>
+      </a>
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        RECENT ACTIVITY
+       </span>
+       <h2>
+        Saved journey plans
+       </h2>
+      </div>
+      <button class="text-btn" data-go="trips">
+       View all &rarr;
+      </button>
+     </div>
+     <div class="list-card empty-state" id="dashboard-trips">
+      Your saved journeys will appear here.
+     </div>
+    </section>
+    <section class="view" id="view-planner">
+     <div class="page-intro">
+      <span class="eyebrow">
+       SMART JOURNEY PLANNER
+      </span>
+      <h2>
+       Compare ways to get there.
+      </h2>
+      <p>
+       Choose cities or search real-world locations, then compare estimated costs and travel times.
+      </p>
+     </div>
+     <div class="panel">
+      <form id="compare-form">
+       <div class="form-grid">
+        <label>
+         Boarding point
+         <div class="search-line">
+          <input id="origin" list="city-list" placeholder="City, station or address" required="" value="Cuttack"/>
+          <button class="search-btn" data-search="origin" type="button">
+           Search map
+          </button>
+         </div>
+         <div class="search-results" id="origin-results">
+         </div>
+        </label>
+        <label>
+         Drop-off point
+         <div class="search-line">
+          <input id="destination" list="city-list" placeholder="City, station or address" required="" value="Bhubaneswar"/>
+          <button class="search-btn" data-search="destination" type="button">
+           Search map
+          </button>
+         </div>
+         <div class="search-results" id="destination-results">
+         </div>
+        </label>
+        <datalist id="city-list">
+        </datalist>
+        <label>
+         Travel urgency
+         <select id="urgency">
+          <option value="2">
+           Urgent &middot; within 2 hours
+          </option>
+          <option selected="" value="8">
+           Today &middot; within 8 hours
+          </option>
+          <option value="24">
+           Within 24 hours
+          </option>
+          <option value="72">
+           Within 3 days
+          </option>
+         </select>
+        </label>
+        <label>
+         Available budget
+         <select id="budget">
+          <option value="500">
+           Up to ₹500
+          </option>
+          <option value="1500">
+           Up to ₹1,500
+          </option>
+          <option value="3000">
+           Up to ₹3,000
+          </option>
+          <option selected="" value="7000">
+           Up to ₹7,000
+          </option>
+          <option value="20000">
+           Flexible budget
+          </option>
+         </select>
+        </label>
+        <label>
+         Recommendation priority
+         <select id="priority">
+          <option value="balanced">
+           Balance time and cost
+          </option>
+          <option value="fastest">
+           Arrive as soon as possible
+          </option>
+          <option value="cheapest">
+           Lowest estimated cost
+          </option>
+         </select>
+        </label>
+       </div>
+       <div class="form-actions">
+        <button class="secondary-btn" id="use-location" type="button">
+         ◎ Use my current location
+        </button>
+        <button class="primary-btn" type="submit">
+         Compare journey options &rarr;
+        </button>
+       </div>
+      </form>
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        YOUR OPTIONS
+       </span>
+       <h2>
+        Journey comparison
+       </h2>
+      </div>
+      <span class="muted" id="result-count">
+       Ready to compare
+      </span>
+     </div>
+     <div class="results-grid" id="results">
+      <div class="list-card empty-state">
+       Choose your boarding and drop-off points to compare estimates.
+      </div>
+     </div>
+    </section>
+    <section class="view" id="view-emergency">
+     <div class="page-intro">
+      <span class="eyebrow">
+       EMERGENCY TRAVEL ASSISTANT
+      </span>
+      <h2>
+       When time matters most.
+      </h2>
+      <p>
+       Use urgency-first recommendations to make a quick, structured decision. This is a planning tool, not an emergency dispatch service.
+      </p>
+     </div>
+     <div class="emergency-banner">
+      <span>
+       ✳
+      </span>
+      <div>
+       <b>
+        Start with the journey, then choose &ldquo;Arrive as soon as possible&rdquo;.
+       </b>
+       <p>
+        Set the destination and compare options in the Journey Planner. Keep a backup option ready.
+       </p>
+      </div>
+      <button class="primary-btn" id="start-emergency-plan">
+       Prioritize speed &rarr;
+      </button>
+     </div>
+     <div class="two-col">
+      <div class="panel">
+       <span class="eyebrow">
+        QUICK CHECKLIST
+       </span>
+       <h3>
+        Before you leave
+       </h3>
+       <label class="check-row">
+        <input type="checkbox"/>
+        Confirm the exact destination and contact person
+       </label>
+       <label class="check-row">
+        <input type="checkbox"/>
+        Verify the current departure with the operator
+       </label>
+       <label class="check-row">
+        <input type="checkbox"/>
+        Check travel time to the boarding point
+       </label>
+       <label class="check-row">
+        <input type="checkbox"/>
+        Share your itinerary with someone you trust
+       </label>
+       <label class="check-row">
+        <input type="checkbox"/>
+        Keep a backup route and emergency contacts
+       </label>
+      </div>
+      <div class="panel">
+       <span class="eyebrow">
+        DECISION FRAMEWORK
+       </span>
+       <h3>
+        How the recommendation works
+       </h3>
+       <div class="decision-step">
+        <b>
+         01 &middot; Filter
+        </b>
+        <span>
+         Exclude options that are not usable in the estimate.
+        </span>
+       </div>
+       <div class="decision-step">
+        <b>
+         02 &middot; Rank
+        </b>
+        <span>
+         Score journey time, estimated fare and transfers based on your priority.
+        </span>
+       </div>
+       <div class="decision-step">
+        <b>
+         03 &middot; Verify
+        </b>
+        <span>
+         Confirm live schedules, prices and availability with the operator before acting.
+        </span>
+       </div>
+      </div>
+     </div>
+    </section>
+    <section class="view" id="view-budget">
+     <div class="page-intro">
+      <span class="eyebrow">
+       TRAVEL BUDGET MANAGER
+      </span>
+      <h2>
+       Make every rupee count.
+      </h2>
+      <p>
+       Track estimated travel costs and actual expenses separately. This log is personal to your account.
+      </p>
+     </div>
+     <div class="budget-summary">
+      <div>
+       <span class="eyebrow light">
+        TOTAL EXPENSES LOGGED
+       </span>
+       <strong id="budget-total">
+        ₹0
+       </strong>
+       <small>
+        From entries you add below
+       </small>
+      </div>
+      <div class="budget-meter">
+       <span>
+        Ticket &middot; Local travel &middot; Food &middot; Stay &middot; Other
+       </span>
+       <div class="meter-track">
+        <i>
+        </i>
+       </div>
+       <small>
+        Use categories to understand where your money goes.
+       </small>
+      </div>
+     </div>
+     <div class="two-col">
+      <div class="panel">
+       <h3>
+        Add an expense
+       </h3>
+       <form class="stack-form" id="budget-form">
+        <label>
+         Expense name
+         <input id="expense-title" minlength="2" placeholder="e.g. Auto to railway station" required=""/>
+        </label>
+        <label>
+         Category
+         <select id="expense-category">
+          <option>
+           Ticket
+          </option>
+          <option>
+           Local transport
+          </option>
+          <option>
+           Food
+          </option>
+          <option>
+           Accommodation
+          </option>
+          <option>
+           Other
+          </option>
+         </select>
+        </label>
+        <label>
+         Amount (₹)
+         <input id="expense-amount" min="1" placeholder="150" required="" step="1" type="number"/>
+        </label>
+        <button class="primary-btn" type="submit">
+         Add expense +
+        </button>
+       </form>
+      </div>
+      <div class="panel">
+       <h3>
+        Budget guidance
+       </h3>
+       <div class="budget-guidance">
+        <span class="budget-dot green">
+        </span>
+        <div>
+         <b>
+          Budget-friendly
+         </b>
+         <p>
+          Estimated fare is at or below 40% of your available budget.
+         </p>
+        </div>
+       </div>
+       <div class="budget-guidance">
+        <span class="budget-dot yellow">
+        </span>
+        <div>
+         <b>
+          Normal cost
+         </b>
+         <p>
+          Estimated fare fits within your available budget.
+         </p>
+        </div>
+       </div>
+       <div class="budget-guidance">
+        <span class="budget-dot red">
+        </span>
+        <div>
+         <b>
+          Expensive
+         </b>
+         <p>
+          Estimated fare is above your available budget.
+         </p>
+        </div>
+       </div>
+       <p class="fineprint">
+        These labels use a simple heuristic, not a market-wide price comparison.
+       </p>
+      </div>
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        YOUR LEDGER
+       </span>
+       <h2>
+        Expense history
+       </h2>
+      </div>
+     </div>
+     <div class="list-card empty-state" id="budget-list">
+      No expenses recorded yet.
+     </div>
+    </section>
+    <section class="view" id="view-nearby">
+     <div class="page-intro">
+      <span class="eyebrow">
+       NEARBY PLACES &amp; MAP
+      </span>
+      <h2>
+       Know what is around you.
+      </h2>
+      <p>
+       Use your location or select a point to look for mapped transport hubs and essential services.
+      </p>
+     </div>
+     <div class="panel">
+      <div class="search-line">
+       <input id="nearby-query" placeholder="Search a city or address" value="Bhubaneswar"/>
+       <button class="secondary-btn" id="nearby-search">
+        Find on map
+       </button>
+       <button class="primary-btn" id="nearby-current">
+        ◎ My location
+       </button>
+      </div>
+      <p class="fineprint">
+       Place search is performed when you click the button, not as you type. Map data &copy; OpenStreetMap contributors.
+      </p>
+     </div>
+     <div class="map" id="map">
+     </div>
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        AROUND YOUR POINT
+       </span>
+       <h2>
+        Nearby transport &amp; essential services
+       </h2>
+      </div>
+      <span class="muted" id="nearby-count">
+       Search a location to begin
+      </span>
+     </div>
+     <div class="place-grid" id="nearby-list">
+     </div>
+    </section>
+    <section class="view" id="view-predictor">
+     <div class="page-intro">
+      <span class="eyebrow">
+       MACHINE LEARNING LAB
+      </span>
+      <h2>
+       Explore the prediction model.
+      </h2>
+      <p>
+       Change the route inputs and run the trained Random Forest model to estimate a demo delay.
+      </p>
+     </div>
+     <div class="metric-grid" id="model-metrics">
+      <div class="stat-card">
+       Loading model metrics&hellip;
+      </div>
+     </div>
+     <div class="two-col">
+      <div class="panel">
+       <h3>
+        Try a prediction
+       </h3>
+       <form class="stack-form" id="predict-form">
+        <label>
+         Journey distance (km)
+         <input id="predict-distance" max="3000" min="1" required="" type="number" value="250"/>
+        </label>
+        <label>
+         Transport mode
+         <select id="predict-mode">
+          <option value="bus">
+           Bus
+          </option>
+          <option selected="" value="train">
+           Train
+          </option>
+          <option value="flight">
+           Flight
+          </option>
+         </select>
+        </label>
+        <label>
+         Number of transfers
+         <input id="predict-transfers" max="5" min="0" required="" type="number" value="0"/>
+        </label>
+        <label>
+         Departure hour (24-hour clock)
+         <input id="predict-hour" max="23" min="0" required="" type="number" value="9"/>
+        </label>
+        <label>
+         Weather/traffic impact (0 = low, 1 = high)
+         <input id="predict-weather" max="1" min="0" required="" step="0.05" type="number" value="0.35"/>
+        </label>
+        <button class="primary-btn" type="submit">
+         Run prediction &rarr;
+        </button>
+       </form>
+       <div class="list-card empty-state" id="prediction-result" style="margin-top:14px">
+        Enter the route details and run your first prediction.
+       </div>
+      </div>
+      <div class="panel">
+       <h3>
+        What the model learns
+       </h3>
+       <p class="muted">
+        The Random Forest regressor uses distance, travel mode, transfers, departure hour and a simulated weather/traffic factor to estimate potential delay minutes.
+       </p>
+       <div class="decision-step">
+        <b>
+         Training
+        </b>
+        <span>
+         Generated synthetic examples are split into training and test sets.
+        </span>
+       </div>
+       <div class="decision-step">
+        <b>
+         Evaluation
+        </b>
+        <span>
+         MAE estimates average absolute error on held-out synthetic test data.
+        </span>
+       </div>
+       <div class="decision-step">
+        <b>
+         Limitations
+        </b>
+        <span>
+         This is a learning demonstration, not a real-world delay forecast. No real operator history or live weather data is used.
+        </span>
+       </div>
+       <div class="source-chip">
+        Python &middot; scikit-learn &middot; RandomForestRegressor
+       </div>
+      </div>
+     </div>
+    </section>
+    <section class="view" id="view-trips">
+     <div class="page-intro">
+      <span class="eyebrow">
+       PERSONAL TRAVEL WORKSPACE
+      </span>
+      <h2>
+       Your saved journeys.
+      </h2>
+      <p>
+       Plans are linked to your account. You can review or remove them at any time.
+      </p>
+     </div>
+     <div class="list-card empty-state" id="trips-list">
+      No saved journeys yet.
+     </div>
+    </section>
+    <footer>
+     <b>
+      Easy to Connect
+     </b>
+     <span>
+      Built with HTML, CSS, JavaScript, FastAPI, SQLite and scikit-learn.
+     </span>
+     <span>
+      Open data: OpenStreetMap &middot; No affiliation with transport operators.
+     </span>
+    </footer>
+   </main>
+  </div>
+  <div class="toast" id="toast" role="status">
+  </div>
+  <script async="" defer="" src="https://accounts.google.com/gsi/client">
+  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+  <script src="/static/app.js">
+  </script>
+ </body>
+</html>
